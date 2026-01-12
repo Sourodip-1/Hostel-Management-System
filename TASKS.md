@@ -10,7 +10,7 @@ This file tracks the progress of the project. Developers please mark tasks as co
 
 ## Phase 1 – Core System
 
-- [ ] Implement Main Menu System
+- [ 🟨 sneha] Implement Main Menu System
 - [ ] Implement Login System (Admin & Student)
 - [ ] Implement Student Registration Function
 - [ ] Set up File Handling (Read/Write for .dat files)
