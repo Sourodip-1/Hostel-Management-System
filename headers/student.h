@@ -9,12 +9,13 @@ struct student
     int roomNumber;
 };
 
-void addStudent();
-void viewStudent();
-void editStudent();
+void addStudent(); //done
+void viewStudent(); //done
+void editStudent(int studentId);
 void deleteStudent();
-int studentLogin(int id[10],char password[10]);
-void searchStudentById(int studentId);
+int studentLogin(int studentId[10],char password[10]); 
+void searchStudentById(int studentId); //done
+void searchStudentByName(char name[30]); //done
 
 
 

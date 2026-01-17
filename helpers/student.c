@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "../headers/student.h"
 
 
@@ -93,12 +94,112 @@ void searchStudentById(int studentId){
             printf("Password     : %s\n", searchById.password);
             printf("Room Number  : %d\n", searchById.roomNumber);
             printf("---------------------------\n");
-        }
-        
-    }
-    
-    
+        }  
+    }  
 }
+
+
+//SEARCH BY NAME
+void searchStudentByName(char name[30]){
+    struct student searchByName;
+    FILE *fp;
+
+    fp=fopen("../data/students.dat","rb");
+    if (fp==NULL)
+    {
+        printf("Couldnt Find Students File!");
+        return;
+    }
+    printf("==== Details of Student with Name %s ====\n",name);
+    while (fread(&searchByName,sizeof(struct student),1,fp))
+    {
+        if (strcmp(strlwr(searchByName.name),strlwr(name))==0)
+        {
+            printf("Student ID   : %d\n", searchByName.studentId);
+            printf("Name         : %s\n", searchByName.name);
+            printf("Password     : %s\n", searchByName.password);
+            printf("Room Number  : %d\n", searchByName.roomNumber);
+            printf("---------------------------\n");
+        }
+    }
+}
+
+//EDIT STUDENT
+void editStudent(int studentId){
+    struct student editStudentData;
+    int choice,found=0;
+    FILE *fp,*temp;
+    fp=fopen("../data/students.dat","rb");
+    temp=fopen("../data/temp.dat","wb");
+
+    if (fp==NULL)
+    {
+        printf("Couldnt Find Students File!");
+        return;
+    }
+
+    while (fread(&editStudentData,sizeof(struct student),1,fp))
+    {
+        if (editStudentData.studentId==studentId)
+        {
+            found=1;
+            do
+            {
+                printf("\nEditing Student ID: %d\n", editStudentData.studentId);
+                printf("1. Edit Name\n");
+                printf("2. Edit Password\n");
+                printf("3. Edit Room Number\n");
+                printf("4. Exit\n");
+                printf("Enter choice: ");
+                scanf("%d", &choice);
+
+                switch (choice)
+                {
+                case 1:
+                    printf("Enter New Name: ");
+                    scanf("%19s", &editStudentData.name);
+                    break;
+
+                case 2:
+                    printf("Enter New Password: ");
+                    scanf("%9s", &editStudentData.password);
+                    break;
+
+                case 3:
+                    printf("Enter New Room Number: ");
+                    scanf("%d", &editStudentData.roomNumber);
+                    break;
+
+                case 4:
+                    printf("No changes made.\n");
+                    break;
+
+                default:
+                    printf("Invalid choice.\n");
+                }
+            } while (choice!=4);
+        }
+    }
+
+    fwrite(&editStudentData,sizeof(struct student),1,temp);
+    
+    fclose(fp);
+    fclose(temp);
+
+    remove("../data/students.dat");
+    rename("../data/temp.dat","../data/students.dat");
+
+    if (found)
+    {
+        printf("Student Data Updated Successfully !!");
+    }else
+    {
+        printf("Failed to Update Student Data.");
+    } 
+}
+
+
+
 
 
 
@@ -107,8 +208,17 @@ void searchStudentById(int studentId){
 int main(){
     addStudent();
 
-    // int id;
-    // printf("ID to Search: ");
-    // scanf(" %d",&id);
-    // searchStudentById(id);
+    viewStudent();
+
+    // char name[30];
+    // printf("Name to Search: ");
+    // scanf(" %s",&name);
+    // searchStudentByName(name);
+
+    int studentId;
+    printf("enter Student ID to search: ");
+    scanf("%d",&studentId);
+    editStudent(studentId);
+
+    viewStudent();
 }
