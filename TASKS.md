@@ -12,7 +12,7 @@ This file tracks the progress of the project. Developers please mark tasks as co
 
 - [ 🟨 sneha] Implement Main Menu System
 - [ 🟨 souro] Implement Login System (Admin & Student)
-- [ ] Implement Student Registration Function
+- [ 🟨 souro] Implement Student Registration Function
 - [ ] Set up File Handling (Read/Write for .dat files)
 
 ## Phase 2 – Hostel Logic
