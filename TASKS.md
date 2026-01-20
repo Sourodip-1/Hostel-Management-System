@@ -11,7 +11,7 @@ This file tracks the progress of the project. Developers please mark tasks as co
 ## Phase 1 – Core System
 
 - [ 🟨 sneha] Implement Main Menu System
-- [ 🟨 souro] Implement Login System (Admin & Student)
+- [ 🟨 sourodip] Implement Login System (Admin & Student)
 - [ 🟩 souro] Implement Student Registration Function
 - [ ] Set up File Handling (Read/Write for .dat files)
 
