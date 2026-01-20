@@ -12,19 +12,19 @@ This file tracks the progress of the project. Developers please mark tasks as co
 
 - [ 🟨 sneha] Implement Main Menu System
 - [ 🟨 souro] Implement Login System (Admin & Student)
-- [ 🟨 souro] Implement Student Registration Function
+- [ 🟩 souro] Implement Student Registration Function
 - [ ] Set up File Handling (Read/Write for .dat files)
 
 ## Phase 2 – Hostel Logic
 
-- [ ] Implement Room Allocation Logic
+- [ 🟩 souro] Implement Room Allocation Logic
 - [ ] Implement Fee Management System (Calculate & Record)
-- [ ] Create Data Structures for Rooms and Fees
+- [ 🟩 souro] Create Data Structures for Rooms and Fees
 
 ## Phase 3 – Role Control
 
-- [ ] Implement Admin Permissions (Add/Delete/View)
-- [ ] Implement Student Permissions (View Own Data, Pay, Complain)
+- [ 🟩 souro] Implement Admin Permissions (Add/Delete/View)
+- [ 🟨 souro] Implement Student Permissions (View Own Data, Pay, Complain)
 - [ ] Secure Password Storage & Validation
 
 ## Phase 4 – Complaints
