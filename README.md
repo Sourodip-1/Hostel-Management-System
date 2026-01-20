@@ -234,3 +234,66 @@ hostel-management-system/
 - Documentation
 
 ---
+
+## 🔧 Recent Code Fixes
+
+### 1. Fixed `editStudent` Function Bug (Data Loss Issue)
+
+**Problem:** When editing a student's data, only the edited student's record was saved to the file, causing all other student records to be lost.
+
+**Root Cause:** The original implementation used a temporary file (`temp.dat`) to rewrite records. However, it only wrote the edited record back to the temp file, instead of writing all records (with the edited one updated).
+
+**Solution:** Refactored the function to use an in-memory array approach:
+- Load all student records from `students.dat` into a `struct student` array (max 1000 students).
+- Find the index of the student to edit by matching `studentId`.
+- Allow editing of name, password, or room number via a menu loop.
+- Write the entire updated array back to `students.dat`, ensuring no data loss.
+
+**Code Changes in `helpers/student.c`:**
+- Replaced file-based temp file logic with array loading and bulk writing.
+- Added error handling for file not found and student not found.
+- Improved reliability by avoiding partial file writes.
+
+**Benefits:** 
+- Eliminates data loss risk.
+- Enables easy indexing for future enhancements (e.g., deleting students).
+- Simplifies the code logic.
+
+### 2. Fixed Name Input Issue (Spaces in Names)
+
+**Problem:** When entering student names with spaces (e.g., "John Doe"), only the first part ("John") was captured; the rest was ignored or caused input buffer issues.
+
+**Root Cause:** Used `scanf("%19s", name)`, which stops reading at the first whitespace character.
+
+**Solution:** Changed to `scanf(" %[^\n]", name)`:
+- The space before `%[^\n]` consumes any leftover whitespace/newlines from previous inputs.
+- `%[^\n]` reads the entire input line until the newline character, allowing full names with spaces.
+
+**Code Changes in `helpers/student.c`:**
+- Updated both `addStudent` and `editStudent` functions for consistency.
+- Applied to name fields only (passwords and IDs typically don't need spaces).
+
+**Benefits:**
+- Supports full names accurately.
+- Prevents input buffer corruption in interactive menus.
+
+### How to Test the Fixes
+
+1. **Compile the Code:**
+   ```
+   gcc helpers/student.c -I headers -o student.exe
+   ```
+
+2. **Add Sample Data:**
+   - Run the program and use `addStudent()` to add a few students with full names (e.g., "Alice Johnson").
+
+3. **Test Editing:**
+   - Use `editStudent(studentId)` to modify a student's name, password, or room number.
+   - Verify that all other students' data remains intact by viewing all records.
+
+4. **Verify Name Handling:**
+   - Ensure names with spaces are stored and displayed correctly.
+
+**Files Affected:** `helpers/student.c`
+
+These fixes improve data integrity and user experience without altering the overall system architecture.

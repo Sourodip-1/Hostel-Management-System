@@ -11,9 +11,9 @@ struct student
 
 void addStudent(); //done
 void viewStudent(); //done
-void editStudent(int studentId);
-void deleteStudent();
-int studentLogin(int studentId[10],char password[10]); 
+void editStudent(int studentId); //done
+void deleteStudent(int studentId); //done
+int studentLogin(int studentId,char password[10]);  
 void searchStudentById(int studentId); //done
 void searchStudentByName(char name[30]); //done
 
