@@ -5,12 +5,17 @@ struct admin
 {
     int adminId;
     char name[20];
-    char pasword[64];
+    char password[64];
 };
 
 
-void initalizeAdminSystem;
-int adminLogin(int id,char password[20]);
-
+void initalizeAdminSystem(); // done
+void addAdmin(); // done
+void showAdmins(int adminId);
+int adminLogin(int id,char password[64]);
+void searchAdminById(int adminId);
+void deleteAdmin(int adminId);
+void editAdmin(int adminId);
+void searchAdminByName(char name[30]);
 
 #endif
