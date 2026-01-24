@@ -1,4 +1,6 @@
 #include "headers/admin.h"
+#include "headers/complaint.h"
+#include "headers/fee.h"
 #include "headers/room.h"
 #include "headers/student.h"
 #include "headers/ui.h"
@@ -163,7 +165,7 @@ void manageRooms() {
     printf(COLOR_GREEN "5." COLOR_RESET " Assign Room to Student\n");
     printf(COLOR_GREEN "6." COLOR_RESET " Remove Student from Room\n");
     printf(COLOR_GREEN "7." COLOR_RESET " View Assigned Students\n");
-    printf(COLOR_GREEN "8." COLOR_RESET " View Fee Status (Placeholder)\n");
+    printf(COLOR_GREEN "8." COLOR_RESET " Manage Fees\n");
     printf(COLOR_RED "0. Back to Dashboard" COLOR_RESET "\n");
     printf("Enter Choice: ");
 
@@ -225,11 +227,29 @@ void manageRooms() {
       viewAssignedStudents();
       waitForInput();
       break;
-    case 8:
+    case 8: {
+      int choice8;
       clearScreen();
-      paidDueStudents();
+      printf("\n=== Manage Fees ===\n");
+      printf("1. Assign Fee to Student\n");
+      printf("2. Check Fee Status\n");
+      printf("Enter choice: ");
+      scanf("%d", &choice8);
+      if (choice8 == 1) {
+        int sId, amt;
+        printf("Enter Student ID: ");
+        scanf("%d", &sId);
+        printf("Enter Fee Amount: ");
+        scanf("%d", &amt);
+        assignFee(sId, amt);
+      } else if (choice8 == 2) {
+        int sId;
+        printf("Enter Student ID: ");
+        scanf("%d", &sId);
+        viewFeeStatus(sId);
+      }
       waitForInput();
-      break;
+    } break;
     case 0:
       break;
     default:
@@ -241,7 +261,7 @@ void manageRooms() {
 
 void adminMenu() {
   int id;
-  char password[64];
+  char password[65];
 
   clearScreen();
   printTitle();
@@ -264,6 +284,7 @@ void adminMenu() {
       printf(COLOR_GREEN "1." COLOR_RESET " Manage Admins\n");
       printf(COLOR_GREEN "2." COLOR_RESET " Manage Students\n");
       printf(COLOR_GREEN "3." COLOR_RESET " Manage Rooms\n");
+      printf(COLOR_GREEN "4." COLOR_RESET " Manage Complaints\n");
       printf(COLOR_RED "0. Logout" COLOR_RESET "\n");
       printf("Number of selection: ");
 
@@ -282,6 +303,40 @@ void adminMenu() {
       case 3:
         manageRooms();
         break;
+      case 4: {
+        int cChoice;
+        do {
+          clearScreen();
+          printTitle();
+          printf("\n" COLOR_BOLD "=== Complaint Management ===" COLOR_RESET
+                 "\n");
+          printf(COLOR_GREEN "1." COLOR_RESET " View All Complaints\n");
+          printf(COLOR_GREEN "2." COLOR_RESET " Resolve Complaint\n");
+          printf(COLOR_RED "0. Back" COLOR_RESET "\n");
+          printf("Enter Choice: ");
+          scanf("%d", &cChoice);
+          switch (cChoice) {
+          case 1:
+            clearScreen();
+            viewAllComplaints();
+            waitForInput();
+            break;
+          case 2: {
+            int cID;
+            printf("Enter Complaint ID to Resolve: ");
+            scanf("%d", &cID);
+            resolveComplaint(cID);
+            waitForInput();
+            break;
+          }
+          case 0:
+            break;
+          default:
+            printf("Invalid\n");
+            waitForInput();
+          }
+        } while (cChoice != 0);
+      } break;
       case 0:
         printf(COLOR_YELLOW "Logging out...\n" COLOR_RESET);
         waitForInput();
@@ -320,6 +375,8 @@ void studentMenu() {
       printf("Welcome Student ID: " COLOR_CYAN "%d" COLOR_RESET "\n", id);
       printf("-------------------------\n");
       printf(COLOR_GREEN "1." COLOR_RESET " View Profile\n");
+      printf(COLOR_GREEN "2." COLOR_RESET " Complaints\n");
+      printf(COLOR_GREEN "3." COLOR_RESET " View Fee Status\n");
       printf(COLOR_RED "0. Logout" COLOR_RESET "\n");
       printf("Number of selection: ");
 
@@ -332,6 +389,52 @@ void studentMenu() {
       case 1:
         clearScreen();
         searchStudentById(id);
+        waitForInput();
+        break;
+      case 2: {
+        int cChoice;
+        do {
+          clearScreen();
+          printTitle();
+          printf("\n" COLOR_BOLD "=== Complaints ===" COLOR_RESET "\n");
+          printf(COLOR_GREEN "1." COLOR_RESET " Raise Complaint\n");
+          printf(COLOR_GREEN "2." COLOR_RESET " View My Complaints\n");
+          printf(COLOR_RED "0. Back" COLOR_RESET "\n");
+          printf("Enter Choice: ");
+          scanf("%d", &cChoice);
+          switch (cChoice) {
+          case 1: {
+            int room = getStudentRoom(id);
+            if (room == -1 || room == 0) {
+              printf("You are not assigned to a room yet.\n");
+              waitForInput();
+            } else {
+              raiseComplaint(id, room);
+            }
+            waitForInput();
+            break;
+          }
+          case 2:
+            clearScreen();
+            viewMyComplaints(id);
+            waitForInput();
+            break;
+          case 0:
+            break;
+          default:
+            printf("Invalid\n");
+            waitForInput();
+          }
+        } while (cChoice != 0);
+      } break;
+      case 3:
+        clearScreen();
+        viewFeeStatus(id);
+        printf("\nDo you want to pay now? (1=Yes, 0=No): ");
+        int p;
+        if (scanf("%d", &p) == 1 && p == 1) {
+          payFee(id);
+        }
         waitForInput();
         break;
       case 0:

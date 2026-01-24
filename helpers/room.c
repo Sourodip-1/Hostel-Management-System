@@ -16,10 +16,12 @@ void addRoom() {
   scanf("%d", &newRoom.roomCapacity); // FIX: leading space to consume newline
 
   printf("Room Type (AC / Non AC)");
-  scanf("%10s", newRoom.Ac_Or_NonAc); // FIX: removed &, length bound
+  scanf(" %9[^\n]",
+        newRoom.Ac_Or_NonAc); // FIX: removed &, length bound, accepts spaces
 
   printf("Room Charges Per Person: ");
   scanf("%d", &newRoom.roomChargesPerPerson);
+
   printf("How Many Students are Assigned: ");
   scanf("%d", &newRoom.studentAssigned);
 
@@ -126,7 +128,7 @@ void editRoomDetails(int roomNumber) {
       break;
     case 2:
       printf("Enter new Type: ");
-      scanf("%s", rooms[index].Ac_Or_NonAc);
+      scanf(" %9[^\n]", rooms[index].Ac_Or_NonAc);
       break;
     case 3:
       printf("Enter new Charges: ");

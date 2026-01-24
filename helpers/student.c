@@ -1,7 +1,7 @@
 #include "../headers/student.h"
+#include "../headers/security.h"
 #include <stdio.h>
 #include <string.h>
-
 
 // CODE BEAUTYFICATION IS DONE USING AI
 
@@ -61,8 +61,10 @@ void addStudent(void) {
   printf("Name of Student: ");
   scanf(" %[^\n]", newstudent.name); // FIX: leading space to consume newline
 
+  char tempPass[30];
   printf("Password: ");
-  scanf("%29s", newstudent.password); // FIX: removed &, length bound
+  scanf("%29s", tempPass);
+  hashPassword(tempPass, newstudent.password);
 
   printf("Room Number: ");
   scanf("%d", &newstudent.roomNumber);
@@ -265,8 +267,11 @@ int studentLogin(int studentId, char password[30]) {
     return -1;
   }
 
+  char hashedInput[65];
+  hashPassword(password, hashedInput);
+
   while (fread(&s, sizeof(struct student), 1, fp) == 1) {
-    if (s.studentId == studentId && strcmp(s.password, password) == 0) {
+    if (s.studentId == studentId && strcmp(s.password, hashedInput) == 0) {
       fclose(fp);
       printf("Login successful!\n");
       return 1;
@@ -278,4 +283,22 @@ int studentLogin(int studentId, char password[30]) {
   return -1;
 }
 
-/* -------------------- TEST MAIN -------------------- */
+/* -------------------- GET STUDENT ROOM -------------------- */
+
+int getStudentRoom(int studentId) {
+  struct student s;
+  FILE *fp = fopen("data/students.dat", "rb");
+
+  if (fp == NULL) {
+    return -1;
+  }
+
+  while (fread(&s, sizeof(struct student), 1, fp) == 1) {
+    if (s.studentId == studentId) {
+      fclose(fp);
+      return s.roomNumber;
+    }
+  }
+  fclose(fp);
+  return -1;
+}
