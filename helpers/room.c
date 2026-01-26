@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_ROOMS 200
+// Macro moved to header room.h
 
 void addRoom() {
   struct room newRoom;
@@ -22,8 +22,7 @@ void addRoom() {
   printf("Room Charges Per Person: ");
   scanf("%d", &newRoom.roomChargesPerPerson);
 
-  printf("How Many Students are Assigned: ");
-  scanf("%d", &newRoom.studentAssigned);
+  newRoom.studentAssigned = 0; // New room starts with 0 students
 
   fp = fopen("data/room.dat", "ab");
 
@@ -157,14 +156,14 @@ void assignRoomToStudent(int studentId, int roomNumber) {
   }
 
   // 1. Update Student's Room
-  struct student students[1000]; // Assuming MAX_STUDENTS from student.c
+  struct student students[MAX_STUDENTS];
   int sCount = 0;
   FILE *sFp = fopen("data/students.dat", "rb");
   if (sFp == NULL) {
     printf("Student data not found.\n");
     return;
   }
-  while (sCount < 1000 &&
+  while (sCount < MAX_STUDENTS &&
          fread(&students[sCount], sizeof(struct student), 1, sFp) == 1) {
     sCount++;
   }
@@ -236,25 +235,21 @@ void assignRoomToStudent(int studentId, int roomNumber) {
 /* -------------------- REMOVE STUDENT FROM ROOM -------------------- */
 void removeStudentFromRoom(int studentId) {
   // 1. Find Student and Get Room
-  struct student
-      students[MAX_ROOMS]; // using MAX_ROOMS sized buffer safely or defining
-                           // MAX_STUDENTS locally? helpers/student.c defined
-                           // MAX_STUDENTS 1000. Let's use 1000 here for safety.
-  struct student buffer_students[1000];
+  struct student students[MAX_STUDENTS];
   int sCount = 0;
   FILE *sFp = fopen("data/students.dat", "rb");
   if (!sFp) {
     printf("Student data not found.\n");
     return;
   }
-  while (sCount < 1000 &&
-         fread(&buffer_students[sCount], sizeof(struct student), 1, sFp) == 1)
+  while (sCount < MAX_STUDENTS &&
+         fread(&students[sCount], sizeof(struct student), 1, sFp) == 1)
     sCount++;
   fclose(sFp);
 
   int sIndex = -1;
   for (int i = 0; i < sCount; i++) {
-    if (buffer_students[i].studentId == studentId) {
+    if (students[i].studentId == studentId) {
       sIndex = i;
       break;
     }
@@ -265,17 +260,17 @@ void removeStudentFromRoom(int studentId) {
     return;
   }
 
-  int oldRoomNumber = buffer_students[sIndex].roomNumber;
+  int oldRoomNumber = students[sIndex].roomNumber;
   if (oldRoomNumber == 0) {
     printf("Student is not assigned to any room.\n");
     return;
   }
 
   // 2. Update Student Record
-  buffer_students[sIndex].roomNumber = 0;
+  students[sIndex].roomNumber = 0;
   sFp = fopen("data/students.dat", "wb");
   for (int i = 0; i < sCount; i++)
-    fwrite(&buffer_students[i], sizeof(struct student), 1, sFp);
+    fwrite(&students[i], sizeof(struct student), 1, sFp);
   fclose(sFp);
 
   // 3. Update Room Count

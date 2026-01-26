@@ -1,6 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+#define MAX_ROOMS 200
+
 struct room {
   int roomNumber;
   int roomCapacity;

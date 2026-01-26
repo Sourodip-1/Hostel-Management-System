@@ -17,7 +17,7 @@
     - Added basic validation helpers
 */
 
-#define MAX_STUDENTS 1000 // FIX: single consistent macro name
+// Macro moved to header student.h
 
 /* -------------------- Utility Helpers -------------------- */
 
@@ -66,8 +66,7 @@ void addStudent(void) {
   scanf("%29s", tempPass);
   hashPassword(tempPass, newstudent.password);
 
-  printf("Room Number: ");
-  scanf("%d", &newstudent.roomNumber);
+  newstudent.roomNumber = 0; // Initialize with no room
 
   fp = fopen("data/students.dat", "ab");
 

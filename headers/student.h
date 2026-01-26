@@ -1,6 +1,8 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
+#define MAX_STUDENTS 1000
+
 struct student {
   int studentId;
   char name[30];

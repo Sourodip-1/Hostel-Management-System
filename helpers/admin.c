@@ -269,10 +269,6 @@ int adminLogin(int adminId, char password[65]) {
         fclose(fp);
         printf("Admin login successful!\n");
         return 1;
-      } else {
-        // Debug print (remove in production)
-        printf("Debug: Hash mismatch.\nStored: %s\nInput : %s\n", a.password,
-               hashedInput);
       }
     }
   }
