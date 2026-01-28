@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Payment Gateway</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 { color: #2c3e50; }
+        p { color: #7f8c8d; }
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover { background-color: #219150; }
+        .success {
+            display: none;
+            color: #27ae60;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Hostel Fee Payment</h1>
+        <p>This is a demo payment page.</p>
+        <p><strong>Amount:</strong> $XXX</p>
+        <button class="btn" onclick="pay()">Pay Now (Demo)</button>
+        <div id="msg" class="success">Payment Successful! Please return to the application.</div>
+    </div>
+
+    <script>
+        function pay() {
+            document.getElementById('msg').style.display = 'block';
+            setTimeout(() => {
+                alert("Payment Processed Successfully!");
+            }, 500);
+        }
+    </script>
+</body>
+</html>

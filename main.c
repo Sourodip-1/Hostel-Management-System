@@ -233,6 +233,8 @@ void manageRooms() {
       printf("\n=== Manage Fees ===\n");
       printf("1. Assign Fee to Student\n");
       printf("2. Check Fee Status\n");
+      printf("3. View All Fees\n");
+      printf("0. Back\n");
       printf("Enter choice: ");
       scanf("%d", &choice8);
       if (choice8 == 1) {
@@ -247,6 +249,9 @@ void manageRooms() {
         printf("Enter Student ID: ");
         scanf("%d", &sId);
         viewFeeStatus(sId);
+      } else if (choice8 == 3) {
+        clearScreen();
+        viewAllFees();
       }
       waitForInput();
     } break;
@@ -430,10 +435,13 @@ void studentMenu() {
       case 3:
         clearScreen();
         viewFeeStatus(id);
-        printf("\nDo you want to pay now? (1=Yes, 0=No): ");
-        int p;
-        if (scanf("%d", &p) == 1 && p == 1) {
-          payFee(id);
+        struct fee f = getFeeStatus(id);
+        if (f.studentId != -1 && f.isPaid == 0) {
+          printf("\nDo you want to pay now? (1=Yes, 0=No): ");
+          int p;
+          if (scanf("%d", &p) == 1 && p == 1) {
+            payFee(id);
+          }
         }
         waitForInput();
         break;

@@ -59,6 +59,22 @@ void payFee(int studentId) {
       if (f.isPaid) {
         printf("Fee is already paid.\n");
       } else {
+        printf("Redirecting to payment gateway...\n");
+// Open payment.html in default browser
+#ifdef _WIN32
+        system("start payment.html");
+#elif __APPLE__
+        system("open payment.html");
+#else
+        system("xdg-open payment.html");
+#endif
+
+        printf("\nPlease complete the payment in the browser.\n");
+        printf("Press Enter after payment is complete to verify...\n");
+        while (getchar() != '\n')
+          ;        // Clear buffer if needed
+        getchar(); // Wait for Enter
+
         f.isPaid = 1;
         fseek(fp, -(long)sizeof(struct fee), SEEK_CUR);
         fwrite(&f, sizeof(struct fee), 1, fp);
@@ -97,5 +113,51 @@ void viewFeeStatus(int studentId) {
 
   if (!found)
     printf("No fee record found for you.\n");
+  fclose(fp);
+}
+struct fee getFeeStatus(int studentId) {
+  struct fee f;
+  struct fee notFound = {-1, 0, 0};
+  FILE *fp = fopen(FEE_FILE, "rb");
+
+  if (fp == NULL) {
+    return notFound;
+  }
+
+  while (fread(&f, sizeof(struct fee), 1, fp) == 1) {
+    if (f.studentId == studentId) {
+      fclose(fp);
+      return f;
+    }
+  }
+
+  fclose(fp);
+  return notFound;
+}
+
+void viewAllFees() {
+  struct fee f;
+  FILE *fp = fopen(FEE_FILE, "rb");
+  int found = 0;
+
+  if (fp == NULL) {
+    printf("No fee data available.\n");
+    return;
+  }
+
+  printf("\n" COLOR_BOLD "=== All Student Fees ===" COLOR_RESET "\n");
+  printf("%-12s %-15s %-12s\n", "Student ID", "Amount", "Status");
+  printf("--------------------------------------------\n");
+
+  while (fread(&f, sizeof(struct fee), 1, fp) == 1) {
+    printf("%-12d %-15d %s\n", f.studentId, f.roomFeePerSemester,
+           f.isPaid ? COLOR_GREEN "PAID" COLOR_RESET
+                    : COLOR_RED "DUE" COLOR_RESET);
+    found = 1;
+  }
+
+  if (!found)
+    printf("No fee records found.\n");
+
   fclose(fp);
 }

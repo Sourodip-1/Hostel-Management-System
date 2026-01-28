@@ -1,6 +1,8 @@
 #ifndef FEE_H
 #define FEE_H
 
+#include "ui.h"
+
 struct fee {
   int studentId;
   int roomFeePerSemester;
@@ -8,9 +10,9 @@ struct fee {
 };
 
 void assignFee(int studentId, int amount);
-void payFee(int studentId); // Simulates payment
-void viewFeeStatus(int studentId);
-
-struct fee getFeeStatus(int studentId); // Helper for printing
+void payFee(int studentId);           // Process payment
+void viewFeeStatus(int studentId);    // View own fee status
+void viewAllFees();                   // Admin view all fees
+struct fee getFeeStatus(int studentId); // Helper for fee data retrieval
 
 #endif

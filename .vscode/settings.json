@@ -1,5 +1,5 @@
 {
     "code-runner.executorMap": {
-        "c": "cd d:\\Codes\\Hostel-Management-System && gcc main.c helpers/*.c -o hms && .\\hms.exe"
+        "c": "gcc main.c helpers/*.c -o hms && .\\hms.exe"
     }
 }
